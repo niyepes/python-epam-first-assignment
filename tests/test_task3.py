@@ -1,6 +1,6 @@
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from task3_nth_letter import nth_char
+from n_letter import nth_char
  
  
 def test_example_case():

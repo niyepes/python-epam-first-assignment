@@ -1,42 +1,27 @@
-name: CI/CD Pipeline
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from dictionary import Dictionary
  
-on:
-  push:
-    branches: ["**"]
-  pull_request:
-    branches: ["**"]
  
-jobs:
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
+def test_existing_entry():
+    d = Dictionary()
+    d.newentry('Apple', 'A fruit that grows on trees')
+    assert d.look('Apple') == 'A fruit that grows on trees'
  
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+def test_missing_entry():
+    d = Dictionary()
+    assert d.look('Banana') == "Can't find entry for Banana"
  
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+def test_overwrite_entry():
+    d = Dictionary()
+    d.newentry('Apple', 'First definition')
+    d.newentry('Apple', 'Second definition')
+    assert d.look('Apple') == 'Second definition'
  
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+def test_multiple_entries():
+    d = Dictionary()
+    d.newentry('Cat', 'A small feline')
+    d.newentry('Dog', 'A loyal companion')
+    assert d.look('Cat') == 'A small feline'
+    assert d.look('Dog') == 'A loyal companion'
  
-      - name: Run tests
-        run: pytest tests/ -v
- 
-  docker:
-    name: Build and Run Docker Image
-    runs-on: ubuntu-latest
-    needs: test
- 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
- 
-      - name: Build Docker image
-        run: docker build -t python-tasks .
- 
-      - name: Run Docker container
-        run: docker run --rm python-tasks

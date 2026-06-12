@@ -1,6 +1,6 @@
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from task2_how_much import get_total
+from costs import get_total
  
  
 costs = {'socks': 5, 'shoes': 60, 'sweater': 30}
